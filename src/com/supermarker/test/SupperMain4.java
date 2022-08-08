@@ -1,0 +1,72 @@
+package com.supermarker.test;
+
+import java.util.Scanner;
+
+public class SupperMain4 {
+	
+	public static void main(String[] args) {
+		// 初始化超市在卖水果
+		Suppermarkets.fruitsMap.put(1001, new Fruits(1001, "苹果", 8,0));
+		Suppermarkets.fruitsMap.put(1002, new Fruits(1002, "草莓", 13,0));
+		Suppermarkets.fruitsMap.put(1003, new Fruits(1003, "芒果", 20,0));
+		
+		// 输入购买多少斤苹果
+		Scanner scanner=new Scanner(System.in);
+		boolean flag=true;
+		while (flag) {
+			String fruitName=null;
+			Fruits fruits=null;
+			while (flag) {
+				System.out.println("请输入需要购买的水果：");
+				fruitName=scanner.nextLine();
+				// 查询并获取对应水果的属性
+				fruits=Suppermarkets.getFruit(fruitName);
+				if (fruits != null) {
+					break;
+				}
+			}			
+			
+			System.out.println("请输入需要购买的重量：");
+			double weight=scanner.nextDouble();
+			
+			// set 水果的重量
+			fruits.setWeight(weight);
+			Suppermarkets.orderMap.put(fruits.getId(), fruits);
+
+			System.out.println("是否继续：Y/N ？");
+			String str=scanner.next();
+			
+			if ( !"Y".equals(str) ) {
+				System.out.println("输入结束！");
+				double total=Suppermarkets.totalAmount(Suppermarkets.orderMap);
+				System.out.println("结算总金额为："+total);
+				System.out.println("是否打折促销？Y/N");
+				String salesPromotion=scanner.next();
+				if ("Y".equals(salesPromotion)) {
+					System.out.println("请输入折扣：");
+					double discount=scanner.nextInt();
+					System.out.println("打折后结算总金额为："+total*discount/10);
+				}
+				System.out.println("是否满减促销？Y/N");
+				String fullReducePromotion=scanner.next();
+				if ("Y".equals(fullReducePromotion)) {
+					System.out.println("请输入满额：");
+					double full=scanner.nextInt();
+					System.out.println("请输入扣减金额：");
+					double discount=scanner.nextInt();
+					if(total*discount/10>=100){
+						total=total*discount/10-10;
+					}else {
+						total=total*discount/10;
+					}
+					System.out.println("折扣满减后结算总金额为："+ total);
+				}
+				scanner.close();
+				break;
+			}
+			System.out.println("继续输入：");
+			scanner.nextLine();
+		}
+		
+	}
+}
